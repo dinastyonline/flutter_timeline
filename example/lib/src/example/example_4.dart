@@ -27,11 +27,10 @@ return Container(
 );
 
 class Example4Vertical extends StatelessWidget {
-  const Example4Vertical({Key? key}) : super(key: key);
+  const Example4Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
@@ -50,15 +49,13 @@ class Example4Vertical extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class Example4Horizontal extends StatelessWidget {
-  const Example4Horizontal({Key? key}) : super(key: key);
+  const Example4Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Row(
@@ -83,5 +80,4 @@ class Example4Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

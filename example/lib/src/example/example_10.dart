@@ -76,32 +76,30 @@ return Container(
 );
 
 class Example10Vertical extends StatelessWidget {
-  const Example10Vertical({Key? key}) : super(key: key);
+  const Example10Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
             color: Colors.white,
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TimelineTile(
                   alignment: TimelineAlign.manual,
                   lineXY: 0.1,
                   isFirst: true,
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
+                  indicatorStyle: IndicatorStyle(
                     color: Colors.purple,
                   ),
-                  beforeLineStyle: const LineStyle(
+                  beforeLineStyle: LineStyle(
                     color: Colors.purple,
                     thickness: 6,
                   ),
                 ),
-                const TimelineDivider(
+                TimelineDivider(
                   begin: 0.1,
                   end: 0.9,
                   thickness: 6,
@@ -110,20 +108,19 @@ class Example10Vertical extends StatelessWidget {
                 TimelineTile(
                   alignment: TimelineAlign.manual,
                   lineXY: 0.9,
-                  beforeLineStyle: const LineStyle(
+                  beforeLineStyle: LineStyle(
                     color: Colors.purple,
                     thickness: 6,
                   ),
-                  afterLineStyle: const LineStyle(
+                  afterLineStyle: LineStyle(
                     color: Colors.deepOrange,
                     thickness: 6,
                   ),
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
+                  indicatorStyle: IndicatorStyle(
                     color: Colors.cyan,
                   ),
                 ),
-                const TimelineDivider(
+                TimelineDivider(
                   begin: 0.1,
                   end: 0.9,
                   thickness: 6,
@@ -133,12 +130,11 @@ class Example10Vertical extends StatelessWidget {
                   alignment: TimelineAlign.manual,
                   lineXY: 0.1,
                   isLast: true,
-                  beforeLineStyle: const LineStyle(
+                  beforeLineStyle: LineStyle(
                     color: Colors.deepOrange,
                     thickness: 6,
                   ),
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
+                  indicatorStyle: IndicatorStyle(
                     color: Colors.red,
                   ),
                 ),
@@ -148,15 +144,13 @@ class Example10Vertical extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class Example10Horizontal extends StatelessWidget {
-  const Example10Horizontal({Key? key}) : super(key: key);
+  const Example10Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Center(
@@ -166,22 +160,21 @@ class Example10Horizontal extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                children: [
+                children: const [
                   TimelineTile(
                     axis: TimelineAxis.horizontal,
                     alignment: TimelineAlign.manual,
                     lineXY: 0.1,
                     isFirst: true,
-                    indicatorStyle: const IndicatorStyle(
-                      height: 20,
+                    indicatorStyle: IndicatorStyle(
                       color: Colors.purple,
                     ),
-                    beforeLineStyle: const LineStyle(
+                    beforeLineStyle: LineStyle(
                       color: Colors.purple,
                       thickness: 6,
                     ),
                   ),
-                  const TimelineDivider(
+                  TimelineDivider(
                     axis: TimelineAxis.vertical,
                     begin: 0.1,
                     end: 0.9,
@@ -192,20 +185,19 @@ class Example10Horizontal extends StatelessWidget {
                     axis: TimelineAxis.horizontal,
                     alignment: TimelineAlign.manual,
                     lineXY: 0.9,
-                    beforeLineStyle: const LineStyle(
+                    beforeLineStyle: LineStyle(
                       color: Colors.purple,
                       thickness: 6,
                     ),
-                    afterLineStyle: const LineStyle(
+                    afterLineStyle: LineStyle(
                       color: Colors.deepOrange,
                       thickness: 6,
                     ),
-                    indicatorStyle: const IndicatorStyle(
-                      height: 20,
+                    indicatorStyle: IndicatorStyle(
                       color: Colors.cyan,
                     ),
                   ),
-                  const TimelineDivider(
+                  TimelineDivider(
                     axis: TimelineAxis.vertical,
                     begin: 0.1,
                     end: 0.9,
@@ -217,12 +209,11 @@ class Example10Horizontal extends StatelessWidget {
                     alignment: TimelineAlign.manual,
                     lineXY: 0.1,
                     isLast: true,
-                    beforeLineStyle: const LineStyle(
+                    beforeLineStyle: LineStyle(
                       color: Colors.deepOrange,
                       thickness: 6,
                     ),
-                    indicatorStyle: const IndicatorStyle(
-                      height: 20,
+                    indicatorStyle: IndicatorStyle(
                       color: Colors.red,
                     ),
                   ),
@@ -233,5 +224,4 @@ class Example10Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

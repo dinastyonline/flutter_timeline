@@ -153,7 +153,7 @@ void main() {
           expectedPositioning: const AxisPosition(
             firstSpace: AxisCoordinates(start: 0, end: 21.845000000000006),
             objectSpace: AxisCoordinates(
-                start: 21.845000000000006, end: 35.61500000000001),
+                start: 21.845000000000006, end: 35.61500000000001,),
             secondSpace: AxisCoordinates(start: 35.61500000000001, end: 143.65),
           ),
         );

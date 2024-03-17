@@ -72,11 +72,10 @@ return Container(
 );
 
 class Example9Vertical extends StatelessWidget {
-  const Example9Vertical({Key? key}) : super(key: key);
+  const Example9Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
@@ -88,7 +87,6 @@ class Example9Vertical extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   isFirst: true,
                   indicatorStyle: const IndicatorStyle(
-                    width: 20,
                     color: Colors.purple,
                   ),
                   beforeLineStyle: const LineStyle(
@@ -102,18 +100,17 @@ class Example9Vertical extends StatelessWidget {
                     color: Colors.amberAccent,
                   ),
                 ),
-                TimelineTile(
+                const TimelineTile(
                   alignment: TimelineAlign.center,
-                  beforeLineStyle: const LineStyle(
+                  beforeLineStyle: LineStyle(
                     color: Colors.purple,
                     thickness: 6,
                   ),
-                  afterLineStyle: const LineStyle(
+                  afterLineStyle: LineStyle(
                     color: Colors.deepOrange,
                     thickness: 6,
                   ),
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
+                  indicatorStyle: IndicatorStyle(
                     color: Colors.cyan,
                   ),
                 ),
@@ -125,7 +122,6 @@ class Example9Vertical extends StatelessWidget {
                     thickness: 6,
                   ),
                   indicatorStyle: const IndicatorStyle(
-                    width: 20,
                     color: Colors.red,
                   ),
                   endChild: Container(
@@ -141,15 +137,13 @@ class Example9Vertical extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class Example9Horizontal extends StatelessWidget {
-  const Example9Horizontal({Key? key}) : super(key: key);
+  const Example9Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Center(
@@ -165,7 +159,6 @@ class Example9Horizontal extends StatelessWidget {
                     alignment: TimelineAlign.center,
                     isFirst: true,
                     indicatorStyle: const IndicatorStyle(
-                      height: 20,
                       color: Colors.purple,
                     ),
                     beforeLineStyle: const LineStyle(
@@ -179,19 +172,18 @@ class Example9Horizontal extends StatelessWidget {
                       color: Colors.amberAccent,
                     ),
                   ),
-                  TimelineTile(
+                  const TimelineTile(
                     axis: TimelineAxis.horizontal,
                     alignment: TimelineAlign.center,
-                    beforeLineStyle: const LineStyle(
+                    beforeLineStyle: LineStyle(
                       color: Colors.purple,
                       thickness: 6,
                     ),
-                    afterLineStyle: const LineStyle(
+                    afterLineStyle: LineStyle(
                       color: Colors.deepOrange,
                       thickness: 6,
                     ),
-                    indicatorStyle: const IndicatorStyle(
-                      height: 20,
+                    indicatorStyle: IndicatorStyle(
                       color: Colors.cyan,
                     ),
                   ),
@@ -204,7 +196,6 @@ class Example9Horizontal extends StatelessWidget {
                       thickness: 6,
                     ),
                     indicatorStyle: const IndicatorStyle(
-                      height: 20,
                       color: Colors.red,
                     ),
                     endChild: Container(
@@ -221,5 +212,4 @@ class Example9Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

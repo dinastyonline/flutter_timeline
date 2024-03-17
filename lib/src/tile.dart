@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:timeline_tile/src/axis.dart';
-import 'package:timeline_tile/src/style.dart';
+import 'axis.dart';
+import 'style.dart';
 
 /// The axis used on the [TimelineTile].
 enum TimelineAxis {
@@ -17,27 +17,28 @@ enum TimelineAxis {
 /// The alignment used on the [TimelineTile].
 enum TimelineAlign {
   /// Automatically align the line to the start according to [TimelineAxis],
-  /// only the ([TimelineTile.rightChild]) will be available.
+  /// only the ([TimelineTile.startChild]) will be available.
   start,
 
   /// Automatically align the line to the end according to [TimelineAxis],
-  /// only the ([TimelineTile.leftChild]) will be available.
+  /// only the ([TimelineTile.endChild]) will be available.
   end,
 
-  /// Automatically align the line to the center, both ([TimelineTile.leftChild])
-  /// and ([TimelineTile.rightChild]) will be available.
+  /// Automatically align the line to the center, both
+  /// ([TimelineTile.startChild]) and ([TimelineTile.endChild]) will be
+  /// available.
   center,
 
-  /// Indicates that the line will be aligned manually and must be used with ([TimelineTile.lineX]),
-  /// both ([TimelineTile.leftChild]) and ([TimelineTile.rightChild]) will be available
-  /// depending on the free space.
+  /// Indicates that the line will be aligned manually and must be used with
+  /// ([TimelineTile.lineXY]), both ([TimelineTile.startChild]) and
+  /// ([TimelineTile.endChild]) will be available depending on the free space.
   manual,
 }
 
 /// A tile that renders a timeline format.
 class TimelineTile extends StatelessWidget {
   const TimelineTile({
-    Key? key,
+    super.key,
     this.axis = TimelineAxis.vertical,
     this.alignment = TimelineAlign.start,
     this.startChild,
@@ -50,16 +51,19 @@ class TimelineTile extends StatelessWidget {
     this.beforeLineStyle = const LineStyle(),
     LineStyle? afterLineStyle,
   })  : afterLineStyle = afterLineStyle ?? beforeLineStyle,
-        assert(alignment != TimelineAlign.start || startChild == null,
-            'Cannot provide startChild with automatic alignment to the left'),
-        assert(alignment != TimelineAlign.end || endChild == null,
-            'Cannot provide endChild with automatic alignment to the right'),
+        assert(
+          alignment != TimelineAlign.start || startChild == null,
+          'Cannot provide startChild with automatic alignment to the left',
+        ),
+        assert(
+          alignment != TimelineAlign.end || endChild == null,
+          'Cannot provide endChild with automatic alignment to the right',
+        ),
         assert(
             alignment != TimelineAlign.manual ||
                 (lineXY != null && lineXY >= 0.0 && lineXY <= 1.0),
             'The lineX must be provided when aligning manually, '
-            'and must be a value between 0.0 and 1.0 inclusive'),
-        super(key: key);
+            'and must be a value between 0.0 and 1.0 inclusive');
 
   /// The axis used on the tile. See [TimelineAxis].
   /// It defaults to [TimelineAxis.vertical]
@@ -75,8 +79,9 @@ class TimelineTile extends StatelessWidget {
   /// The child widget positioned at the end
   final Widget? endChild;
 
-  /// The X (in case of [TimelineAxis.vertical]) or Y (in case of [TimelineAxis.horizontal])
-  /// axis value used to position the line when [TimelineAlign.manual].
+  /// The X (in case of [TimelineAxis.vertical])
+  /// or Y (in case of [TimelineAxis.horizontal]) axis value used to position
+  /// the line when [TimelineAlign.manual].
   /// Must be a value from 0.0 to 1.0
   final double? lineXY;
 
@@ -103,108 +108,104 @@ class TimelineTile extends StatelessWidget {
   final LineStyle afterLineStyle;
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        double startCrossAxisSpace = 0;
-        double endCrossAxisSpace = 0;
-        if (axis == TimelineAxis.vertical) {
-          startCrossAxisSpace = indicatorStyle.padding.left;
-          endCrossAxisSpace = indicatorStyle.padding.right;
-        } else {
-          startCrossAxisSpace = indicatorStyle.padding.top;
-          endCrossAxisSpace = indicatorStyle.padding.bottom;
-        }
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final isVertical = axis == TimelineAxis.vertical;
+          final startCrossAxisSpace = isVertical
+              ? indicatorStyle.padding.top
+              : indicatorStyle.padding.left;
+          final endCrossAxisSpace = isVertical
+              ? indicatorStyle.padding.bottom
+              : indicatorStyle.padding.right;
 
-        final children = <Widget>[
-          if (startCrossAxisSpace > 0)
-            SizedBox(
-              height:
-                  axis == TimelineAxis.vertical ? null : startCrossAxisSpace,
-              width: axis == TimelineAxis.vertical ? startCrossAxisSpace : null,
-            ),
-          _Indicator(
-            axis: axis,
-            beforeLineStyle: beforeLineStyle,
-            afterLineStyle: afterLineStyle,
-            indicatorStyle: indicatorStyle,
-            hasIndicator: hasIndicator,
-            isLast: isLast,
-            isFirst: isFirst,
-          ),
-          if (endCrossAxisSpace > 0)
-            SizedBox(
-              height: axis == TimelineAxis.vertical ? null : endCrossAxisSpace,
-              width: axis == TimelineAxis.vertical ? endCrossAxisSpace : null,
-            ),
-        ];
-
-        final defaultChild = axis == TimelineAxis.vertical
-            ? Container(height: 100)
-            : Container(width: 100);
-        if (alignment == TimelineAlign.start) {
-          children.add(Expanded(child: endChild ?? defaultChild));
-        } else if (alignment == TimelineAlign.end) {
-          children.insert(0, Expanded(child: startChild ?? defaultChild));
-        } else {
-          final indicatorAxisXY =
-              alignment == TimelineAlign.center ? 0.5 : lineXY!;
-          final indicatorTotalSize = _indicatorTotalSize();
-
-          final positioning = calculateAxisPositioning(
-            totalSize: axis == TimelineAxis.vertical
-                ? constraints.maxWidth
-                : constraints.maxHeight,
-            objectSize: indicatorTotalSize,
-            axisPosition: indicatorAxisXY,
-          );
-
-          if (positioning.firstSpace.size > 0) {
-            children.insert(
-              0,
+          final children = <Widget>[
+            if (startCrossAxisSpace > 0)
               SizedBox(
-                height: axis == TimelineAxis.horizontal
-                    ? positioning.firstSpace.size
-                    : null,
-                width: axis == TimelineAxis.vertical
-                    ? positioning.firstSpace.size
-                    : null,
-                child: startChild ?? defaultChild,
+                height:
+                    axis == TimelineAxis.vertical ? null : startCrossAxisSpace,
+                width:
+                    axis == TimelineAxis.vertical ? startCrossAxisSpace : null,
               ),
-            );
-          }
-
-          if (positioning.secondSpace.size > 0) {
-            children.add(
+            _Indicator(
+              axis: axis,
+              beforeLineStyle: beforeLineStyle,
+              afterLineStyle: afterLineStyle,
+              indicatorStyle: indicatorStyle,
+              hasIndicator: hasIndicator,
+              isLast: isLast,
+              isFirst: isFirst,
+            ),
+            if (endCrossAxisSpace > 0)
               SizedBox(
-                height: axis == TimelineAxis.horizontal
-                    ? positioning.secondSpace.size
-                    : null,
-                width: axis == TimelineAxis.vertical
-                    ? positioning.secondSpace.size
-                    : null,
-                child: endChild ?? defaultChild,
+                height:
+                    axis == TimelineAxis.vertical ? null : endCrossAxisSpace,
+                width: axis == TimelineAxis.vertical ? endCrossAxisSpace : null,
               ),
-            );
-          }
-        }
+          ];
 
-        return axis == TimelineAxis.vertical
-            ? IntrinsicHeight(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: children,
-                ),
-              )
-            : IntrinsicWidth(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: children,
+          final defaultChild = axis == TimelineAxis.vertical
+              ? Container(height: 100)
+              : Container(width: 100);
+          if (alignment == TimelineAlign.start) {
+            children.add(Expanded(child: endChild ?? defaultChild));
+          } else if (alignment == TimelineAlign.end) {
+            children.insert(0, Expanded(child: startChild ?? defaultChild));
+          } else {
+            final indicatorAxisXY =
+                alignment == TimelineAlign.center ? 0.5 : lineXY!;
+            final indicatorTotalSize = _indicatorTotalSize();
+
+            final positioning = calculateAxisPositioning(
+              totalSize: axis == TimelineAxis.vertical
+                  ? constraints.maxWidth
+                  : constraints.maxHeight,
+              objectSize: indicatorTotalSize,
+              axisPosition: indicatorAxisXY,
+            );
+
+            if (positioning.firstSpace.size > 0) {
+              children.insert(
+                0,
+                SizedBox(
+                  height: axis == TimelineAxis.horizontal
+                      ? positioning.firstSpace.size
+                      : null,
+                  width: axis == TimelineAxis.vertical
+                      ? positioning.firstSpace.size
+                      : null,
+                  child: startChild ?? defaultChild,
                 ),
               );
-      },
-    );
-  }
+            }
+
+            if (positioning.secondSpace.size > 0) {
+              children.add(
+                SizedBox(
+                  height: axis == TimelineAxis.horizontal
+                      ? positioning.secondSpace.size
+                      : null,
+                  width: axis == TimelineAxis.vertical
+                      ? positioning.secondSpace.size
+                      : null,
+                  child: endChild ?? defaultChild,
+                ),
+              );
+            }
+          }
+
+          return axis == TimelineAxis.vertical
+              ? IntrinsicHeight(
+                  child: Row(
+                    children: children,
+                  ),
+                )
+              : IntrinsicWidth(
+                  child: Column(
+                    children: children,
+                  ),
+                );
+        },
+      );
 
   double _indicatorTotalSize() {
     if (axis == TimelineAxis.vertical) {
@@ -272,7 +273,7 @@ class _Indicator extends StatelessWidget {
       SizedBox(
         height: axis == TimelineAxis.vertical ? double.infinity : size,
         width: axis == TimelineAxis.vertical ? size : double.infinity,
-      )
+      ),
     ];
 
     final renderDefaultIndicator =
@@ -301,71 +302,69 @@ class _Indicator extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomIndicator() {
-    return Positioned.fill(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          AxisPosition position;
-          EdgeInsets spaceChildren;
-          EdgeInsets spacePadding;
-          if (axis == TimelineAxis.vertical) {
-            position = calculateAxisPositioning(
-              totalSize: constraints.maxHeight,
-              objectSize: indicatorStyle.totalHeight,
-              axisPosition: indicatorStyle.indicatorXY,
-            );
-            spaceChildren = EdgeInsets.only(
-              top: position.firstSpace.size,
-              bottom: position.secondSpace.size,
-            );
-            spacePadding = EdgeInsets.only(
-              top: indicatorStyle.padding.top,
-              bottom: indicatorStyle.padding.bottom,
-            );
-          } else {
-            position = calculateAxisPositioning(
-              totalSize: constraints.maxWidth,
-              objectSize: indicatorStyle.totalWidth,
-              axisPosition: indicatorStyle.indicatorXY,
-            );
-            spaceChildren = EdgeInsets.only(
-              left: position.firstSpace.size,
-              right: position.secondSpace.size,
-            );
-            spacePadding = EdgeInsets.only(
-              left: indicatorStyle.padding.left,
-              right: indicatorStyle.padding.right,
-            );
-          }
+  Widget _buildCustomIndicator() => Positioned.fill(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            AxisPosition position;
+            EdgeInsets spaceChildren;
+            EdgeInsets spacePadding;
+            if (axis == TimelineAxis.vertical) {
+              position = calculateAxisPositioning(
+                totalSize: constraints.maxHeight,
+                objectSize: indicatorStyle.totalHeight,
+                axisPosition: indicatorStyle.indicatorXY,
+              );
+              spaceChildren = EdgeInsets.only(
+                top: position.firstSpace.size,
+                bottom: position.secondSpace.size,
+              );
+              spacePadding = EdgeInsets.only(
+                top: indicatorStyle.padding.top,
+                bottom: indicatorStyle.padding.bottom,
+              );
+            } else {
+              position = calculateAxisPositioning(
+                totalSize: constraints.maxWidth,
+                objectSize: indicatorStyle.totalWidth,
+                axisPosition: indicatorStyle.indicatorXY,
+              );
+              spaceChildren = EdgeInsets.only(
+                left: position.firstSpace.size,
+                right: position.secondSpace.size,
+              );
+              spacePadding = EdgeInsets.only(
+                left: indicatorStyle.padding.left,
+                right: indicatorStyle.padding.right,
+              );
+            }
 
-          return Padding(
-            padding: spaceChildren,
-            child: Padding(
-              padding: spacePadding,
-              child: SizedBox(
-                height: indicatorStyle.height,
-                width: indicatorStyle.width,
-                child: indicatorStyle.indicator,
+            return Padding(
+              padding: spaceChildren,
+              child: Padding(
+                padding: spacePadding,
+                child: SizedBox(
+                  height: indicatorStyle.height,
+                  width: indicatorStyle.width,
+                  child: indicatorStyle.indicator,
+                ),
               ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+            );
+          },
+        ),
+      );
 }
 
 /// A custom painter that renders a line and an indicator
 class _TimelinePainter extends CustomPainter {
   _TimelinePainter({
     required this.axis,
-    this.paintIndicator = true,
-    this.isFirst = false,
-    this.isLast = false,
     required IndicatorStyle indicatorStyle,
     required LineStyle beforeLineStyle,
     required LineStyle afterLineStyle,
-  })   : beforeLinePaint = Paint()
+    this.paintIndicator = true,
+    this.isFirst = false,
+    this.isLast = false,
+  })  : beforeLinePaint = Paint()
           ..color = beforeLineStyle.color
           ..strokeWidth = beforeLineStyle.thickness,
         afterLinePaint = Paint()
@@ -392,15 +391,9 @@ class _TimelinePainter extends CustomPainter {
             ? indicatorStyle.padding.bottom
             : indicatorStyle.padding.right,
         drawGap = indicatorStyle.drawGap,
-        iconData = indicatorStyle.iconStyle != null
-            ? indicatorStyle.iconStyle?.iconData
-            : null,
-        iconColor = indicatorStyle.iconStyle != null
-            ? indicatorStyle.iconStyle?.color
-            : null,
-        iconSize = indicatorStyle.iconStyle != null
-            ? indicatorStyle.iconStyle?.fontSize
-            : null;
+        iconData = indicatorStyle.iconStyle?.iconData,
+        iconColor = indicatorStyle.iconStyle?.color,
+        iconSize = indicatorStyle.iconStyle?.fontSize;
 
   /// The axis used to render the line at the [TimelineAxis.vertical]
   /// or [TimelineAxis.horizontal].
@@ -437,11 +430,11 @@ class _TimelinePainter extends CustomPainter {
   final bool paintIndicator;
 
   /// Whether this paint should start the line somewhere in the middle,
-  /// according to [indicatorY]. It defaults to false.
+  /// according to [indicatorStartGap]. It defaults to false.
   final bool isFirst;
 
   /// Whether this paint should end the line somewhere in the middle,
-  /// according to [indicatorY]. It defaults to false.
+  /// according to [indicatorStartGap]. It defaults to false.
   final bool isLast;
 
   /// If there must be a gap between the lines. The gap size will always be the
@@ -454,7 +447,8 @@ class _TimelinePainter extends CustomPainter {
   /// The icon color.
   final Color? iconColor;
 
-  /// The icon size. If not provided, the size will be adjusted according to [indicatorRadius].
+  /// The icon size. If not provided, the size will be adjusted according to
+  /// indicatorRadius.
   final double? iconSize;
 
   @override
@@ -497,33 +491,38 @@ class _TimelinePainter extends CustomPainter {
         var fontSize = iconSize;
         fontSize ??= (indicatorRadius * 2) - 10;
 
-        final builder = ui.ParagraphBuilder(ui.ParagraphStyle(
-          fontFamily: iconData!.fontFamily,
-        ));
-        builder.pushStyle(ui.TextStyle(
-          fontSize: fontSize,
-          color: iconColor,
-        ));
-        builder.addText(String.fromCharCode(iconData!.codePoint));
+        final builder = ui.ParagraphBuilder(
+          ui.ParagraphStyle(
+            fontFamily: iconData!.fontFamily,
+          ),
+        )..pushStyle(
+          ui.TextStyle(
+            fontSize: fontSize,
+            color: iconColor,
+          ),
+        )..addText(String.fromCharCode(iconData!.codePoint));
 
-        final paragraph = builder.build();
-        paragraph.layout(const ui.ParagraphConstraints(width: 0.0));
+        final paragraph = builder.build()
+        ..layout(const ui.ParagraphConstraints(width: 0));
 
         final halfIconSize = fontSize / 2;
-        final offsetIcon = Offset(indicatorCenter.dx - halfIconSize,
-            indicatorCenter.dy - halfIconSize);
+        final offsetIcon = Offset(
+          indicatorCenter.dx - halfIconSize,
+          indicatorCenter.dy - halfIconSize,
+        );
         canvas.drawParagraph(paragraph, offsetIcon);
       }
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 
   void _drawSingleLine(
-      Canvas canvas, double centerAxis, AxisPosition position) {
+    Canvas canvas,
+    double centerAxis,
+    AxisPosition position,
+  ) {
     if (!isFirst) {
       final beginTopLine = axis == TimelineAxis.vertical
           ? Offset(centerAxis, 0)
@@ -566,7 +565,10 @@ class _TimelinePainter extends CustomPainter {
   }
 
   void _drawBeforeLine(
-      Canvas canvas, double centerAxis, AxisPosition position) {
+    Canvas canvas,
+    double centerAxis,
+    AxisPosition position,
+  ) {
     final beginTopLine = axis == TimelineAxis.vertical
         ? Offset(centerAxis, 0)
         : Offset(0, centerAxis);

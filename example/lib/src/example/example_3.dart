@@ -6,7 +6,7 @@ import '../showcase_timeline.dart';
 const example3 = Example(
   name: 'Manual aligning the indicator',
   description:
-      'With TimelineAlign.manual you can provide the lineXY, which allows you to'
+      'With TimelineAlign.manual you can provide the lineXY, which allows you to '
       'specify a value from 0.0 to 1.0, that represents a width/height percentage. '
       'For example, aligning at 0.3(30%) of the width/height:',
   code: '''
@@ -31,11 +31,10 @@ return Container(
 );
 
 class Example3Vertical extends StatelessWidget {
-  const Example3Vertical({Key? key}) : super(key: key);
+  const Example3Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
@@ -57,15 +56,13 @@ class Example3Vertical extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class Example3Horizontal extends StatelessWidget {
-  const Example3Horizontal({Key? key}) : super(key: key);
+  const Example3Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Row(
@@ -93,5 +90,4 @@ class Example3Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

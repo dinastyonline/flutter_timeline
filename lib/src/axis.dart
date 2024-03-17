@@ -32,12 +32,10 @@ class AxisPosition {
       firstSpace.hashCode ^ objectSpace.hashCode ^ secondSpace.hashCode;
 
   @override
-  String toString() {
-    return 'AxisPosition{'
+  String toString() => 'AxisPosition{'
         'firstSpace: $firstSpace, '
         'objectSpace: $objectSpace, '
         'secondSpace: $secondSpace}';
-  }
 }
 
 /// The coordinates to position an object into an axis.
@@ -52,9 +50,7 @@ class AxisCoordinates {
           'The end coordinate must be bigger or equals than the start coordinate',
         );
 
-  factory AxisCoordinates.zero() {
-    return const AxisCoordinates(start: 0, end: 0);
-  }
+  factory AxisCoordinates.zero() => const AxisCoordinates(start: 0, end: 0);
 
   /// The position it starts
   final double start;
@@ -80,9 +76,7 @@ class AxisCoordinates {
   int get hashCode => start.hashCode ^ end.hashCode ^ size.hashCode;
 
   @override
-  String toString() {
-    return 'AxisCoordinates{start: $start, end: $end, size: $size}';
-  }
+  String toString() => 'AxisCoordinates{start: $start, end: $end, size: $size}';
 }
 
 /// Given an axis (x or y) of [totalSize], this will calculate how to position
@@ -99,32 +93,35 @@ AxisPosition calculateAxisPositioning({
         ' between 0.0 and 1.0 inclusive');
   }
 
-  if (objectSize >= totalSize)
+  if (objectSize >= totalSize) {
     return _alignObject(
       totalSize: totalSize,
       objectSize: objectSize,
       alignEnd: true,
       alignStart: true,
     );
+  }
 
   final objectCenter = totalSize * axisPosition;
   final objectHalfSize = objectSize / 2;
 
   final firstSize = objectCenter - objectHalfSize;
-  if (firstSize < 0)
+  if (firstSize < 0) {
     return _alignObject(
       totalSize: totalSize,
       objectSize: objectSize,
       alignStart: true,
     );
+  }
 
   final secondSize = totalSize - objectCenter - objectHalfSize;
-  if (secondSize < 0)
+  if (secondSize < 0) {
     return _alignObject(
       totalSize: totalSize,
       objectSize: objectSize,
       alignEnd: true,
     );
+  }
 
   return AxisPosition(
     firstSpace: AxisCoordinates(start: 0, end: firstSize),
@@ -139,15 +136,17 @@ AxisPosition _alignObject({
   bool alignStart = false,
   bool alignEnd = false,
 }) {
-  if (alignStart == false && alignEnd == false)
+  if (!alignStart && !alignEnd) {
     throw AssertionError('Either alignTop or alignBottom must be true');
+  }
 
-  if (alignStart && alignEnd)
+  if (alignStart && alignEnd) {
     return AxisPosition(
       firstSpace: AxisCoordinates.zero(),
       objectSpace: AxisCoordinates(start: 0, end: totalSize),
       secondSpace: AxisCoordinates.zero(),
     );
+  }
 
   return AxisPosition(
     firstSpace: alignStart

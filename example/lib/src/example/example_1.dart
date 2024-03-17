@@ -7,7 +7,7 @@ const example1 = Example(
   name: 'The simplest tile',
   description: 'If the axis is vertical, it aligns default to the start, with '
       'a height of 100. The tile will always try to be as wide as it can get horizontally.\n\n'
-      'If the axis is horizontal, It aligns default to the start, with a width'
+      'If the axis is horizontal, It aligns default to the start, with a width '
       'of 100. The tile will always try to be as wide as it can get vertically.',
   code: '''
 /// Vertical
@@ -27,29 +27,26 @@ return Container(
 );
 
 class Example1Vertical extends StatelessWidget {
-  const Example1Vertical({Key? key}) : super(key: key);
+  const Example1Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
             color: Colors.white,
-            child: TimelineTile(),
+            child: const TimelineTile(),
           ),
         ],
       ),
     );
-  }
 }
 
 class Example1Horizontal extends StatelessWidget {
-  const Example1Horizontal({Key? key}) : super(key: key);
+  const Example1Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Row(
@@ -57,7 +54,7 @@ class Example1Horizontal extends StatelessWidget {
               Container(
                 constraints: const BoxConstraints(maxHeight: 100),
                 color: Colors.white,
-                child: TimelineTile(
+                child: const TimelineTile(
                   axis: TimelineAxis.horizontal,
                   alignment: TimelineAlign.center,
                 ),
@@ -67,5 +64,4 @@ class Example1Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

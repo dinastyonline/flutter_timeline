@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -5,9 +7,10 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'showcase_timeline.dart';
 
 class ShowcaseTimelineTile extends StatelessWidget {
+  const ShowcaseTimelineTile({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -36,7 +39,7 @@ class ShowcaseTimelineTile extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     itemCount: examples.length,
-                    itemBuilder: (BuildContext context, int index) {
+                    itemBuilder: (context, index) {
                       final example = examples[index];
 
                       return TimelineTile(
@@ -56,36 +59,34 @@ class ShowcaseTimelineTile extends StatelessWidget {
                         endChild: GestureDetector(
                           child: _RowExample(example: example),
                           onTap: () {
-                            Navigator.push(
+                            unawaited(Navigator.push(
                               context,
                               MaterialPageRoute<ShowcaseTimeline>(
                                 builder: (_) =>
                                     ShowcaseTimeline(example: example),
                               ),
-                            );
+                            ),);
                           },
                         ),
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
     );
-  }
 }
 
 class _IndicatorExample extends StatelessWidget {
-  const _IndicatorExample({Key? key, required this.number}) : super(key: key);
+  const _IndicatorExample({required this.number});
 
   final String number;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.fromBorderSide(
@@ -102,17 +103,15 @@ class _IndicatorExample extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _RowExample extends StatelessWidget {
-  const _RowExample({Key? key, required this.example}) : super(key: key);
+  const _RowExample({required this.example});
 
   final Example example;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.all(20),
       child: Row(
         children: <Widget>[
@@ -133,5 +132,4 @@ class _RowExample extends StatelessWidget {
         ],
       ),
     );
-  }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:flutter_highlight/themes/atelier-sulphurpool-dark.dart';
@@ -15,13 +17,12 @@ import 'example/example_8.dart';
 import 'example/example_9.dart';
 
 class ShowcaseTimeline extends StatelessWidget {
-  const ShowcaseTimeline({Key? key, required this.example}) : super(key: key);
+  const ShowcaseTimeline({required this.example, super.key});
 
   final Example example;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -37,7 +38,7 @@ class ShowcaseTimeline extends StatelessWidget {
           backgroundColor: Colors.transparent,
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: <Widget>[
                   Text(
@@ -87,7 +88,7 @@ class ShowcaseTimeline extends StatelessWidget {
                         const SliverPadding(padding: EdgeInsets.only(top: 40)),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -95,37 +96,31 @@ class ShowcaseTimeline extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _Code extends StatelessWidget {
-  const _Code({Key? key, required this.code}) : super(key: key);
+  const _Code({required this.code});
 
   final String code;
 
   @override
-  Widget build(BuildContext context) {
-    return HighlightView(
+  Widget build(BuildContext context) => HighlightView(
       code,
       language: 'dart',
       theme: atelierSulphurpoolDarkTheme,
     );
-  }
 }
 
 class _Description extends StatelessWidget {
   const _Description({
-    Key? key,
-    required this.description,
-    required this.code,
-  }) : super(key: key);
+    required this.description, required this.code,
+  });
 
   final String description;
   final String code;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(6)),
         color: Colors.white.withOpacity(0.2),
@@ -142,7 +137,6 @@ class _Description extends StatelessWidget {
           ),
           Theme(
             data: Theme.of(context).copyWith(
-              accentColor: Colors.white,
               dividerColor: Colors.transparent,
               unselectedWidgetColor: Colors.white,
             ),
@@ -160,19 +154,19 @@ class _Description extends StatelessWidget {
                   onPressed: () {
                     showCodeDialog(context);
                   },
-                  child: Text(
-                    'FULL SCREEN',
-                    style: GoogleFonts.lato(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 16,
-                    ),
-                  ),
                   style: ButtonStyle(
                     side: MaterialStateProperty.all(
                       BorderSide(
                         color: Colors.white.withOpacity(0.7),
                         width: 2,
                       ),
+                    ),
+                  ),
+                  child: Text(
+                    'FULL SCREEN',
+                    style: GoogleFonts.lato(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -182,19 +176,16 @@ class _Description extends StatelessWidget {
         ],
       ),
     );
-  }
 
   void showCodeDialog(BuildContext context) {
-    showDialog<AlertDialog>(
+    unawaited(showDialog<AlertDialog>(
       context: context,
-      builder: (BuildContext context) {
-        return Center(
+      builder: (context) => Center(
           child: SingleChildScrollView(
             child: _Code(code: code),
           ),
-        );
-      },
-    );
+        ),
+    ),);
   }
 }
 

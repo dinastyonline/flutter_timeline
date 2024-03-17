@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timeline_tile/src/tile.dart';
+import 'tile.dart';
 
 /// Used to customize the indicator from the line.
 class IndicatorStyle {
@@ -7,15 +7,13 @@ class IndicatorStyle {
     this.width = 20,
     this.height = 20,
     this.indicator,
-    this.padding = const EdgeInsets.all(0),
+    this.padding = EdgeInsets.zero,
     this.color = Colors.grey,
     this.iconStyle,
     this.indicatorXY = 0.5,
     this.drawGap = false,
-  })  : assert(width >= 0,
-            'The width must be provided and bigger than 0.0'),
-        assert(height >= 0,
-            'The height must be provided and bigger than 0.0');
+  })  : assert(width >= 0, 'The width must be provided and bigger than 0.0'),
+        assert(height >= 0, 'The height must be provided and bigger than 0.0');
 
   /// The width from the indicator.
   /// It defaults to 20.

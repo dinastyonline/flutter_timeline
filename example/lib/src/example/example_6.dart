@@ -73,11 +73,10 @@ return Container(
 );
 
 class Example6Vertical extends StatelessWidget {
-  const Example6Vertical({Key? key}) : super(key: key);
+  const Example6Vertical({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Container(
@@ -89,7 +88,6 @@ class Example6Vertical extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   isFirst: true,
                   indicatorStyle: const IndicatorStyle(
-                    width: 20,
                     color: Colors.purple,
                     indicatorXY: 0.2,
                     padding: EdgeInsets.all(8),
@@ -141,15 +139,13 @@ class Example6Vertical extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class Example6Horizontal extends StatelessWidget {
-  const Example6Horizontal({Key? key}) : super(key: key);
+  const Example6Horizontal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
+  Widget build(BuildContext context) => SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
           Center(
@@ -164,7 +160,6 @@ class Example6Horizontal extends StatelessWidget {
                     alignment: TimelineAlign.center,
                     isFirst: true,
                     indicatorStyle: const IndicatorStyle(
-                      height: 20,
                       color: Colors.purple,
                       indicatorXY: 0.2,
                       padding: EdgeInsets.all(8),
@@ -220,5 +215,4 @@ class Example6Horizontal extends StatelessWidget {
         ],
       ),
     );
-  }
 }
